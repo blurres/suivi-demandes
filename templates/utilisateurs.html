@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Utilisateurs{% endblock %}
+{% block content %}
+<h1 class="h3 mb-0 text-gray-800">Utilisateurs</h1>
+<button class="btn btn-primary mb-2" type="button" 
+data-bs-toggle="modal" 
+data-bs-target="#staticBackdrop">Nouveau</button>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Ajouter un utilisateur</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="">
+            <div class="form-group">
+                <label for="exampleFormControlInput1">Nom</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" >
+              </div>
+              <div class="form-group">
+                <label for="exampleFormControlInput1">Prénom</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1">
+            </div>
+            <div class="form-group d-flex" 
+            style="align-items: center;width: 100%; gap:.5rem;">
+                <div class="form-group-input">
+                    <label for="password">Mot de passe</label>
+                    <input type="password" class="form-control" id="password" style="width:23.5rem;" required>
+                </div>
+                <button class="btn btn-outline-dark" type="button"
+                style="height:1cm;margin-top:auto;">générer</button>
+            </div>
+            
+            <div class="form-group">
+                <label for="profile">Photo de profil</label>
+                <input type="file" name="profile" id="profile" class="form-control" required>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+        </form>
+          <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- table and modal here -->
+<div class="card" 
+style="padding: 10px; 
+border:none;
+box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+
+</div>
+
+<script>
+    setActiveLink('utilisateurs');
+</script>
+
+{% endblock %}

@@ -1,0 +1,47 @@
+<footer id="footer" class="sticky-footer bg-white">
+    <div class="container my-auto text-center">
+        <span>&copy; IDECA-Afrique 2025</span>
+        
+    </div>
+
+
+
+    <script>
+        const darkModeBtn = document.getElementById('dark-mode-btn');
+        const body = document.body;
+        const sidebar = document.getElementById('accordionSidebar');
+        const navbar = document.querySelector('.navbar');
+        const footer = document.getElementById('footer')
+        const titles = document.querySelectorAll('.text-gray-800')
+        const darkModeIcon = document.querySelector('.fa-moon');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const collapseInner = document.querySelector('.collapse-inner');
+        
+        
+    
+        darkModeBtn.addEventListener('click', function() {
+            body.classList.toggle('dark-mode')
+            document.getElementById('content-wrapper').classList.toggle('dark-mode')
+            footer.classList.toggle('bg-white')
+            footer.classList.toggle('dark-mode')
+            sidebar.classList.toggle('bg-gradient-primary')
+            sidebar.classList.toggle('dark-mode')
+            navbar.classList.toggle('navbar-light')
+            navbar.classList.toggle('bg-white')
+            navbar.classList.toggle('dark-mode')
+
+
+           titles.forEach( title => {
+            title.classList.toggle('dark-mode')
+           })
+
+            darkModeIcon.classList.toggle('fa-sun')
+            darkModeIcon.classList.toggle('fa-moon')
+            profileDropdown.classList.toggle('dark-mode')
+            collapseInner.classList.toggle('dark-mode');
+            collapseInner.classList.toggle('bg-white');
+           
+        })
+       
+    </script>
+</footer>

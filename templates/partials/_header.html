@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3"><i class="fa fa-bars"></i></button>
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown no-arrow mx-1" title="Mode sombre">
+            <a class="nav-link" id="dark-mode-btn"><i class="fas fa-moon fa-fw"></i></a>
+        </li>
+        <div class="topbar-divider d-none d-sm-block"></div>
+        <li class="nav-item dropdown no-arrow" >
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ current_user.username }}</span>
+                <img class="img-profile rounded-circle" src="{{ url_for('static', filename='img/undraw_profile.svg') }}">
+            </a>
+            <div id="profile-dropdown" class="dropdown-menu dropdown-menu-right shadow animated--grow-in">
+                <a class="dropdown-item" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>Profile</a>
+                <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>Déconnexion</a>
+            </div>
+        </li>
+    </ul>
+</nav>
+
+<style>
+    #dark-mode-btn {
+        cursor: pointer;
+    }
+    body.dark-mode, #content-wrapper.dark-mode  {
+        background-color: #232429 !important;
+    }
+    .text-gray-800.dark-mode {
+        color: #e9e9e9 !important;
+    }
+    
+    #footer.dark-mode, .navbar.dark-mode {
+        background-color: #28292e;
+    }
+
+    #footer.dark-mode span {
+        color: #e9e9e9 !important;
+    }
+
+    .navbar.dark-mode .text-gray-600 {
+        color: #e9e9e9 !important;
+    }
+    
+    .navbar.dark-mode i {
+        color: #FFD63A;
+    }
+
+    .navbar-nav.dark-mode {
+        background-color: #3b3c42;
+    }
+   
+    #profile-dropdown.dark-mode {
+        background-color: #3b3c42;
+    }
+    #profile-dropdown.dark-mode .dropdown-item{
+        color: #e9e9e9 !important;
+    }
+    #profile-dropdown.dark-mode .dropdown-item:hover {
+        background-color: #e9e9e9 !important;
+        color: #33343a !important;
+    }
+    .collapse-inner.dark-mode {
+        background-color: #33343a;
+    }
+    .collapse-inner.dark-mode .collapse-item {
+        color: #e9e9e9 !important;
+    }
+    .collapse-inner.dark-mode .collapse-item:hover {
+        background-color: #e9e9e9 !important;
+        color: #33343a !important;
+    }
+</style>
+

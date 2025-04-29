@@ -1,0 +1,125 @@
+<!-- templates/lieux_de_formation.html -->
+{% extends 'base.html' %}
+{% block title %}Organismes{% endblock %}
+{% block content %}
+<h1 class="h3 mb-0 text-gray-800 mb-2">Organismes</h1>
+<!-- table and modal here -->
+<button class="btn btn-primary mb-2" type="button" data-toggle="modal" data-target="#staticBackdrop">Nouveau</button>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="staticBackdropLabel">Ajouter un organisme</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+  <form method="POST" action="{{ url_for('create_organisme') }}">
+    <div class="form-group">
+    <label for="organisme">Organisme</label>
+    <input type="text" class="form-control" id="organisme" name="organisme" required>
+    </div>
+    <div class="form-group">
+    <label for="pays">Pays</label>
+    
+    <select name="pays" id="pays" class="form-control" required>
+      <option value="">-- Sélectionner --</option>
+      {% for country in countries %}
+        <option value="{{ country }}">{{ country }}</option>
+      {% endfor %}
+    </select>
+    </div>
+
+    </div>
+    <div class="modal-footer">
+    <button type="submit" class="btn btn-success">Enregistrer</button>
+  </form>
+<button type="button" class="btn btn-dark" data-dismiss="modal">Fermer</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="card" style="border:none;padding:10px;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Organisme</th>
+        <th scope="col">Pays</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for organisme in organismes %}
+      <tr>
+        <th scope="row">{{ organisme.id }}</th>
+        <td>{{ organisme.name }}</td>
+        <td>{{ organisme.country }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('delete_organisme', id=organisme.id) }}" style="display:inline;">
+            <button class="btn btn-sm btn-danger">Supprimer</button>
+          </form>
+          <button class="btn btn-sm btn-warning"
+                  data-toggle="modal"
+                  data-target="#editModal-{{ organisme.id }}">
+            Modifier
+          </button>
+        </td>
+      </tr>
+
+        <!-- Edit modal -->
+      <div class="modal fade" id="editModal-{{ organisme.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form method="POST" action="{{ url_for('edit_organisme', id=organisme.id) }}">
+              <div class="modal-header">Modifier l'organisme</div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="edit-organisme">Organisme</label>
+                  <input name="organisme" value="{{ organisme.name }}" class="form-control" id="edit-organisme" required>
+                </div>
+                <div class="form-group">
+                  <label for="edit-pays">Pays</label>
+                  <select name="pays" id="edit-pays" class="form-control" required>
+                    <option value="">-- Sélectionner --</option>
+                    {% for country in countries %}
+                        {% if country == organisme.country %}
+                            <option value="{{ country }}" selected>{{ country }}</option>
+                        {% else %}
+                            <option value="{{ country }}">{{ country }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-warning text-black" type="submit">Mettre à jour</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+        {% endfor %}
+        
+    </tbody>
+  </table>
+</div>
+
+
+
+<script>
+    setActiveLink('organismes');
+</script>
+     
+{% endblock %}
+
+
+                   
+                    
+        

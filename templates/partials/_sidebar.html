@@ -1,0 +1,38 @@
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center"  href="{{ url_for('demandes') }}">
+        <div class="sidebar-brand-icon"><img src="{{ url_for('static', filename='img/logo.jpg') }}" height="50"></div>
+        <div class="sidebar-brand-text" style="font-size: .85rem;">IDECA-Afrique</div>
+    </a>
+    <hr class="sidebar-divider my-0">
+    <li class="nav-item" id="demandes"><a class="nav-link"  href="{{ url_for('demandes') }}"><i class="fas fa-fw fa-table"></i><span>Demandes</span></a></li>
+    <hr class="sidebar-divider">
+    <li id="create" class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"><i class="fas fa-fw fa-folder"></i><span>Création</span></a>
+        <div id="collapsePages" class="collapse" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" id="types" href="{{ url_for('types_de_formation') }}">Types de formation</a>
+                <a class="collapse-item" id="seminaires" href="{{ url_for('seminaires') }}">Séminaires</a>
+                <a class="collapse-item" id="lieux" href="{{ url_for('lieux_de_formation') }}">Lieux de formation</a>
+                <a class="collapse-item" id="organismes" href="{{ url_for('organismes') }}">Organismes</a>
+            </div>
+        </div>
+    </li>
+    <li id="operations" class="nav-item"><a class="nav-link"  href="{{ url_for('operations') }}"><i class="fas fa-fw fa-chart-area"></i><span>Opérations</span></a></li>
+    <li id="utilisateurs" class="nav-item"><a class="nav-link"  href="{{ url_for('utilisateurs') }}"><i class="fas fa-fw fa-table"></i><span>Utilisateurs</span></a></li>
+</ul>
+
+<script>
+    const setActiveLink = (linkId) => {
+        const link = document.getElementById(linkId);
+        if (link.classList.contains('active')) {
+            link.classList.remove('active');
+        } else {
+            link.classList.add('active');
+        }
+
+        if (linkId === 'types' || linkId === 'seminaires' || linkId === 'lieux' || linkId === 'organismes') {
+            const create = document.getElementById('create');
+            create.classList.toggle('active');
+        }
+    }
+</script>

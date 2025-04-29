@@ -1,0 +1,66 @@
+{% extends 'auth_base.html' %}
+{% block title %}Authentification{% endblock %}
+
+{% block content %}
+<style>
+  body {
+      background-color: #f8f9fc;
+  }
+  #dark-mode-btn {
+      font-size: 20px;
+      float: right;
+      margin-top: 15px;
+      margin-right: 20px;
+      cursor: pointer;
+  }
+  .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+  }
+  .dark-mode {
+      background-color: #343a40;
+      color: white;
+  }
+  .dark-mode .form-control {
+      background-color: #495057;
+      color: white;
+      border: 1px solid #6c757d;
+  }
+  .dark-mode .form-label {
+      color: white;
+  }
+  .dark-mode .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+  }
+  .dark-mode .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+  }
+
+</style>
+<form method="POST" action="{{ url_for('login') }}">
+        <div class="form-group form-header">
+            <img src="{{ url_for('static', filename='./img/logo.jpg') }}" alt="logo" height="200">
+            <h3 class="text-center text-black">Authentification</h3>
+        </div>
+        <!-- Email input -->
+        <div data-mdb-input-init class="form-outline mb-2">
+            <label class="form-label" for="username">Nom d'utilisateur</label>
+            <input type="text" id="username" name="username" required class="form-control" />
+        </div>
+      
+        <!-- Password input -->
+        <div data-mdb-input-init class="form-outline mb-4">
+            <label class="form-label" for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required class="form-control" />
+        </div>
+      
+        <!-- Submit button -->
+        <button  type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Connexion</button>
+      
+        
+</form>
+{% endblock %}

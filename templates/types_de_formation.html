@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Types de formation{% endblock %}
+
+{% block content %}
+<h1 class="h3 mb-2 text-gray-800">Types de formation</h1>
+
+<!-- 1) Create button -->
+<button class="btn btn-primary mb-3" data-toggle="modal" data-target="#createModal">
+  Nouveau
+</button>
+
+<!-- Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form method="POST" action="{{ url_for('create_type') }}">
+        <div class="modal-header">
+          <h5 class="modal-title">Ajouter un type</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="newType">Nom du type</label>
+            <input id="newType"
+                   name="name"
+                   type="text"
+                   class="form-control"
+                   required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Enregistrer</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- 2) Table of existing types -->
+<div class="card" style="box-shadow: 0 6px 24px rgba(0,0,0,0.05);">
+  <table class="table table-striped mb-0">
+    <thead>
+      <tr><th>ID</th><th>Type</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for t in types %}
+      <tr>
+        <th scope="row">{{ t.id }}</th>
+        <td>{{ t.name }}</td>
+        <td>
+          <form method="POST" action="{{ url_for('delete_type', id=t.id) }}" style="display:inline;">
+            <button class="btn btn-sm btn-danger">Supprimer</button>
+          </form>
+          <button class="btn btn-sm btn-warning"
+                  data-toggle="modal"
+                  data-target="#editModal-{{ t.id }}">
+            Modifier
+          </button>
+        </td>
+      </tr>
+    
+      <!-- Edit modal -->
+      <div class="modal fade" id="editModal-{{ t.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form method="POST" action="{{ url_for('edit_type', id=t.id) }}">
+              <div class="modal-header">Modifier le type</div>
+              <div class="modal-body">
+                <input name="name" value="{{ t.name }}" class="form-control" required>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-warning text-black" type="submit">Mettre à jour</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </tbody>
+    
+  </table>
+</div>
+
+<script>
+  setActiveLink('types')
+</script>
+
+{% endblock %}
+
+
+                    

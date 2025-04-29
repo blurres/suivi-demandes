@@ -1,0 +1,153 @@
+<!-- templates/lieux_de_formation.html -->
+{% extends 'base.html' %}
+{% block title %}Séminaires{% endblock %}
+{% block content %}
+<h1 class="h3 mb-0 text-gray-800">Séminaires</h1>
+<!-- table and modal here -->
+<button class="btn btn-primary mb-2" type="button" data-toggle="modal" data-target="#staticBackdrop">Nouveau</button>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="staticBackdropLabel">Ajouter un séminaire</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+<form action="">
+<div class="form-group">
+<label for="exampleFormControlInput1">Types</label>
+<select name="" id="" class="form-control">
+<option value="">xxxxxxxxxxxxx</option>
+<option value="">yyyyyyyyyyyyy</option>
+<option value="">zzzzzzzzzzzz</option>
+</select>
+</div>
+<div class="form-group">
+<label for="exampleFormControlInput1">Référence</label>
+<input type="text" class="form-control" id="exampleFormControlInput2">
+</div>
+<div class="form-group">
+<label for="exampleFormControlInput1">Thème</label>
+<textarea name="" id="" placeholder="" class="form-control"></textarea>
+<!-- <textarea type="text" class="form-control" id="exampleFormControlInput2"> -->
+</div>
+
+</div>
+<div class="modal-footer">
+<button type="submit" class="btn btn-success">Enregistrer</button>
+</form>
+<button type="button" class="btn btn-dark" data-dismiss="modal">Fermer</button>
+</div>
+</div>
+</div>
+</div>
+
+
+
+<div class="card" style="border:none;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Référence</th>
+        <th scope="col">Thème</th>
+        <th scope="col">Type</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">1</th>
+        <td>13DEL</td>
+        <td>Mark</td>
+        <td>xx</td>
+        <td class="dropdown" 
+        ><i style="font-size: 1.4rem;margin-left:5px;cursor:pointer;" 
+        class="dropdown-toggle fa-solid fa-ellipsis" 
+        type="button" 
+        id="dropdownMenuButton" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false"></i>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#staticBackdrop1">Voir</a>
+            <a class="dropdown-item" href="#">Modifier</a>
+            <a class="dropdown-item" href="#">Supprimer</a>
+          </div>
+    </td>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop1" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+<div class="modal-body">
+...
+</div>
+<div class="modal-footer">
+<button type="button" class="btn bg-dark text-white" data-dismiss="modal">Fermer</button>
+</div>
+</div>
+</div>
+</div>             
+    </tr>
+      <tr>
+        <th scope="row">2</th>
+        <td>ij5knk</td>
+        <td>Jacob</td>
+        <td>xx</td>
+        <td class="dropdown" 
+        ><i style="font-size: 1.4rem;margin-left:5px;cursor:pointer;" 
+        class="dropdown-toggle fa-solid fa-ellipsis" 
+        type="button" 
+        id="dropdownMenuButton" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false"></i>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Voir</a>
+            <a class="dropdown-item" href="#">Modifier</a>
+            <a class="dropdown-item" href="#">Supprimer</a>
+          </div>
+    </td>
+      </tr>
+      <tr>
+        <th scope="row">3</th>
+        <td>llepke</td>
+        <td>Larry</td>
+        <td>xx</td>
+        <td class="dropdown" 
+        ><i style="font-size: 1.4rem;margin-left:5px;cursor:pointer;" 
+        class="dropdown-toggle fa-solid fa-ellipsis" 
+        type="button" 
+        id="dropdownMenuButton" 
+        data-toggle="dropdown" 
+        aria-haspopup="true" 
+        aria-expanded="false"></i>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Voir</a>
+            <a class="dropdown-item" href="#">Modifier</a>
+            <a class="dropdown-item" href="#">Supprimer</a>
+          </div>
+    </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <script>
+    setActiveLink('seminaires')
+  </script>
+{% endblock %}
+
+
+                   
+                    
+                    
