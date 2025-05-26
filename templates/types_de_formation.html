@@ -2,6 +2,16 @@
 {% block title %}Types de formation{% endblock %}
 
 {% block content %}
+<style>
+
+  table thead th {
+      position: sticky;
+      line-height: 50px;
+      top: 0;
+      z-index: 1;
+      
+    }
+</style>
 <h1 class="h3 mb-2 text-gray-800">Types de formation</h1>
 
 <!-- 1) Create button -->
@@ -38,7 +48,7 @@
 </div>
 
 <!-- 2) Table of existing types -->
-<div class="card" style="box-shadow: 0 6px 24px rgba(0,0,0,0.05);">
+<div class="card mb-1" style="max-height: 380px;overflow-y: auto;box-shadow: 0 6px 24px rgba(0,0,0,0.05);">
   <table class="table table-striped mb-0">
     <thead>
       <tr><th>ID</th><th>Type</th><th>Actions</th></tr>
@@ -49,16 +59,38 @@
         <th scope="row">{{ t.id }}</th>
         <td>{{ t.name }}</td>
         <td>
-          <form method="POST" action="{{ url_for('delete_type', id=t.id) }}" style="display:inline;">
-            <button class="btn btn-sm btn-danger">Supprimer</button>
-          </form>
+          <button data-bs-toggle="modal" 
+                data-bs-target="#deleteModal-{{ t.id }}"
+                class="btn btn-sm btn-danger" title="supprimer"><i class="fas fa-trash"></i></button>
           <button class="btn btn-sm btn-warning"
                   data-toggle="modal"
-                  data-target="#editModal-{{ t.id }}">
-            Modifier
+                  data-target="#editModal-{{ t.id }}" 
+                  title="modifier">
+            <i class="fas fa-pencil"></i>
           </button>
         </td>
       </tr>
+
+      <!-- Delete modal -->
+       <div class="modal fade" id="deleteModal-{{ t.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Attention</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('delete_type', id=t.id) }}" style="display:inline;">
+                        <p>Êtes-vous sûr de vouloir supprimer ce type ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+                </div>
+            </div>
+            </div>
     
       <!-- Edit modal -->
       <div class="modal fade" id="editModal-{{ t.id }}" tabindex="-1">

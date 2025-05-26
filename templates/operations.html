@@ -1,4 +1,4 @@
-<!-- templates/lieux_de_formation.html -->
+<!-- templates/operations.html -->
 {% extends 'base.html' %}
 {% block title %}Opérations{% endblock %}
 {% block content %}
@@ -7,16 +7,636 @@
         display: none !important;
     }
 
+    @media print {
+  /* Masquer les éléments non essentiels */
+  .no-print { display: none; }
+}
 
 </style>
-<h1 class="h3 mb-0 text-gray-800">Opérations</h1>
+<h1 class="h3 mb-4 text-gray-800">Opérations</h1>
 <!-- table and modal here -->
+ <div class="card" style="border:none;padding:10px;
+ box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+ <h4>Filtres</h4>
+    <div class="mb-3 row">
+        <div class="col-md-2">
+            <label for="debut">Date de début</label>
+            <input type="date" class="form-control" id="debut" name="debut">
+        </div>
+        <div class="col-md-2">
+            <label for="fin">Date de fin</label>
+            <input type="date" class="form-control" id="fin" name="fin">
+        </div>
+  <div class="col-md-4">
+    <label for="filterType" class="form-label">Type</label>
+    <select name="filterType" class="form-control" id="filterType">
+        <option value="">-- Choisir --</option>
+        <option value="all">Tous</option>
+        {% for type in types %}
+        <option value="{{ type.name }}">{{ type.name }}</option>
+        {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+  <label for="filterSeminaire" class="form-label">Séminaire</label>
+    <select name="filterSeminaire" class="form-control" id="filterSeminaire">
+        <option value="">-- Choisir --</option>
+        <option value="all">Tous</option>
+        {% for seminaire in seminaires %}
+        <option value="{{ seminaire.reference }}">
+          {{ seminaire.reference }} - {{ seminaire.theme }}
+        </option>
+        {% endfor %}
+    </select>
+  </div>
+ 
+  <div class="mt-2 col-md-3">
+    <label for="filterPays" class="form-label">Pays</label>
+    <select name="filterPays" id="filterPays" class="form-control">
+        <option value="">-- Choisir --</option>
+        <option value="all">Tous</option>
+        {% for country in countries %}
+        <option value="{{ country }}">{{ country }}</option>
+        {% endfor %}
+    </select>
+  </div>
+  
+  <div class="mt-2 col-md-3">
+    <label for="filterLieu" class="form-label">Lieu de formation</label>
+    <select name="filterLieu" id="filterLieu" class="form-control">
+      <option value="">-- Choisir --</option>
+      <option value="all">Tous</option>
+        {% for lieu in lieux %}
+        <option value="{{ lieu.name }}">{{ lieu.name }}</option>
+        {% endfor %}
+    </select>
+  </div>
+  <div class="mt-2 col-md-3">
+    <label for="filterContact">Contact</label>
+    <select name="filterContact" id="filterContact" class="form-control">
+        <option value="">-- Choisir --</option>
+        <option value="all">Tous</option>
+        {% for contact in contacts %}
+        <option value="{{ contact }}">{{ contact }}</option>
+        {% endfor %}
+    </select>
+  </div>
+
+  <div class="d-flex col-md-2" style="height:50%;margin-top: auto;gap:.3rem;float: right;">
+    <button type="button" data-bs-toggle="modal" data-bs-target="#advancedFilter" class="btn btn-primary" id="filterBtn" title="Filtres avancés"><i class="fas fa-filter"></i></button>
+     
+    <!-- Filtres avancés -->
+<div class="modal fade" id="advancedFilter" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div style="width: 70vw;" class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title fs-6" id="staticBackdropLabel">Filtres avancés</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <div class="period">
+          <h5>Période</h5>
+          <div class="mb-3 row">
+            <div class="col-md-3">
+              <label for="adv-debut" class="form-label">Date de début</label>
+              <input type="date" class="form-control" id="adv-debut" name="adv-debut">
+            </div>
+            <div class="col-md-3">
+              <label for="adv-fin" class="form-label">Date de fin</label>
+              <input type="date" class="form-control" id="adv-fin" name="adv-fin">
+            </div>
+          </div>
+        </div>
+        <hr>
+
+        <div class="row">
+          <div class="col-md-5">
+            <label>Types</label>
+            <!-- checkboxes for each type -->
+             {% for type in types %}
+            <div class="form-check">
+                <input class="form-check-input filter-type-adv" type="checkbox" value="{{ type.name }}" id="adv-type-{{ loop.index }}">
+                <label class="form-check-label" for="adv-type-{{ loop.index }}">{{ type.name }}</label>
+            </div>
+            {% endfor %}
+
+          </div>
+          <div class="col-md-7">
+            <label for="filterSeminairesAdvances">Séminaires</label>
+            <!-- checkboxes for each seminar (filtered by types checkboxes) -->
+             {% for seminaire in seminaires %}
+              <div class="form-check">
+                  <input class="form-check-input filter-seminaire-adv"
+                        type="checkbox"
+                        value="{{ seminaire.reference }}"
+                        data-type="{{ seminaire.type_formation }}" 
+                        id="adv-seminaire-{{ loop.index }}">
+                  <label class="form-check-label" for="adv-seminaire-{{ loop.index }}">
+                      {{ seminaire.reference }} - {{ seminaire.theme }}
+                  </label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="applyAdvancedFilters">Appliquer</button>
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
+</div>  
+    
+    <button id="resetFilters" class="clear-btn btn btn-dark" title="Réinitialiser filtres"><i class="fas fa-trash"></i></button>
+
+  </div>
+  
+</div>
+
+ </div> <br>
+<div class="card table-responsive" style="border:none;padding:10px; 
+box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(190, 163, 163, 0.08) 0px 0px 0px 1px;">
+<button type="button" 
+    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+     title="Afficher/Masquer colonnes"
+    style="height:2rem;width:2rem;
+    justify-content:center;align-items:center;" 
+    class="d-flex btn btn-dark"><i class="fas fa-table"></i></button>
+    <table class="table table-striped" id="table-demandes">
+        <thead>
+          <tr>
+            <th scope="col" data-col="id">ID</th>
+            <th scope="col" data-col="type">Type</th>
+            <th scope="col" data-col="reference">Référence</th>
+            <th scope="col" data-col="theme">Thème</th>
+            <th scope="col" data-col="nom">Nom</th>
+            <th scope="col" data-col="prenoms">Prénom(s)</th>
+            <th scope="col" data-col="tels">Tel(s)</th> 
+            <th scope="col" data-col="emails">Email(s)</th>
+            <th scope="col" data-col="organisme">Organisme</th>
+            <th scope="col" data-col="pays">Pays</th>
+            <th scope="col" data-col="contact">Contact</th>
+            <th scope="col" data-col="lieu">Lieu de formation</th>
+            <th scope="col" data-col="debut">Début</th>
+            <th scope="col" data-col="fin">Fin</th>
+            <th scope="col" data-col="duree">Durée</th>
+            <th scope="col" data-col="dateRecep">Date Rec. Mail</th>
+            <th scope="col" data-col="dateAccuseRecep">Date Accusé Recep.</th>
+            <th scope="col" data-col="proforma">Proforma</th>
+            <th scope="col" data-col="fiche">Fiche d'inscription</th>
+            <th scope="col" data-col="attestation">Attestation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="20" class="text-center">Aucune donnée</td></tr>
+        </tbody>
+    </table>
+
+    <button style="width:7rem;" class="btn btn-info" id="print"><i class="fas fa-print"></i> Imprimer</button>
+</div>
 
 
+    <!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title fs-6" id="staticBackdropLabel">Afficher / Masquer colonnes</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="columnToggles">
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="id" id="toggle-id" checked>
+                <label class="form-check-label" for="toggle-id">ID</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="type" id="toggle-type" checked>
+                <label class="form-check-label" for="toggle-type">Type</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="reference" id="toggle-reference" checked>
+                <label class="form-check-label" for="toggle-reference">Référence</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="theme" id="toggle-theme" checked>
+                <label class="form-check-label" for="toggle-theme">Thème</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="nom" id="toggle-nom" checked>
+                <label class="form-check-label" for="toggle-nom">Nom</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="prenoms" id="toggle-prenoms" checked>
+                <label class="form-check-label" for="toggle-prenoms">Prénom(s)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="tels" id="toggle-tels" checked>
+                <label class="form-check-label" for="toggle-tels">Tel(s)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="emails" id="toggle-emails" checked>
+                <label class="form-check-label" for="toggle-emails">Email(s)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="organisme" id="toggle-organisme" checked>
+                <label class="form-check-label" for="toggle-organisme">Organisme</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="pays" id="toggle-pays" checked>
+                <label class="form-check-label" for="toggle-pays">Pays</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="contact" id="toggle-contact" checked>
+                <label class="form-check-label" for="toggle-contact">Contact</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="lieu" id="toggle-lieu" checked>
+                <label class="form-check-label" for="toggle-lieu">Lieu de formation</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="debut" id="toggle-debut" checked>
+                <label class="form-check-label" for="toggle-debut">Date de début</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="fin" id="toggle-fin" checked>
+                <label class="form-check-label" for="toggle-fin">Date de fin</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="duree" id="toggle-duree" checked>
+                <label class="form-check-label" for="toggle-duree">Durée</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="dateRecep" id="toggle-dateRecep" checked>
+                <label class="form-check-label" for="toggle-dateRecep">Date Réception Mail</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="dateAccuseRecep" id="toggle-dateAccuseRecep" checked>
+                <label class="form-check-label" for="toggle-dateAccuseRecep">Date Accusé Réception</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="proforma" id="toggle-proforma" checked>
+                <label class="form-check-label" for="toggle-proforma">Proforma</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="fiche" id="toggle-fiche" checked>
+                <label class="form-check-label" for="toggle-fiche">Fiche d'inscription</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="attestation" id="toggle-attestation" checked>
+                <label class="form-check-label" for="toggle-attestation">Attestation</label>
+            </div>
+
+    <!-- ajoute autant de colonnes que tu as -->
+</div>
+
+        
+      </div>
+    </div>
+  </div>
+</div>
 
 <script>
-    setActiveLink('operations');
+setActiveLink('operations');
+
+// === Gestion des colonnes affichables ===
+document.addEventListener('DOMContentLoaded', function () {
+  const checkboxes = document.querySelectorAll('.column-toggle');
+  const storageKey = 'hiddenCols';
+
+  let hiddenCols = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+  function toggleColumn(colName, show) {
+    const cells = document.querySelectorAll(`[data-col="${colName}"]`);
+    cells.forEach(cell => {
+      if (!cell.classList.contains('column-toggle-container')) {
+        cell.style.display = show ? '' : 'none';
+      }
+    });
+  }
+
+  checkboxes.forEach(checkbox => {
+    const colName = checkbox.getAttribute('data-col');
+    const shouldBeVisible = !hiddenCols.includes(colName);
+
+    checkbox.checked = shouldBeVisible;
+    toggleColumn(colName, shouldBeVisible);
+
+    checkbox.addEventListener('change', function () {
+      const isChecked = this.checked;
+      toggleColumn(colName, isChecked);
+
+      if (!isChecked && !hiddenCols.includes(colName)) {
+        hiddenCols.push(colName);
+      } else if (isChecked && hiddenCols.includes(colName)) {
+        hiddenCols = hiddenCols.filter(col => col !== colName);
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(hiddenCols));
+    });
+  });
+});
+
+// === Filtres simples ===
+document.addEventListener("DOMContentLoaded", function () {
+  const filters = {
+    type: document.getElementById("filterType"),
+    seminaire: document.getElementById("filterSeminaire"),
+    pays: document.getElementById("filterPays"),
+    lieu: document.getElementById("filterLieu"),
+    contact: document.getElementById("filterContact"),
+    debut: document.getElementById("debut"),
+    fin: document.getElementById("fin"),
+  };
+
+  const tbody = document.querySelector("#table-demandes tbody");
+
+  function getFilters() {
+    const values = {};
+    for (const [key, el] of Object.entries(filters)) {
+      const val = el.value;
+      values[key] = (val && val !== "all") ? val : "";
+    }
+    return values;
+  }
+
+  function hasAnyFilterActive(filters) {
+    return Object.values(filters).some(v => v !== "");
+  }
+
+  async function applyFilters() {
+    const filterValues = getFilters();
+
+    if (!hasAnyFilterActive(filterValues)) {
+      tbody.innerHTML = "";
+      return;
+    }
+
+    const query = new URLSearchParams(filterValues).toString();
+    const response = await fetch(`/filtrer-demandes?${query}`);
+    const data = await response.json();
+
+    tbody.innerHTML = "";
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="20" class="text-center">Aucune donnée</td></tr>';
+    } else {
+      const hiddenCols = JSON.parse(localStorage.getItem('hiddenCols')) || [];
+
+      for (const d of data) {
+        const columns = [
+          { key: 'id', label: d.id },
+          { key: 'type', label: d.type },
+          { key: 'reference', label: d.reference },
+          { key: 'theme', label: d.theme },
+          { key: 'nom', label: d.nom },
+          { key: 'prenoms', label: d.prenoms },
+          { key: 'tels', label: d.tels },
+          { key: 'emails', label: d.emails },
+          { key: 'organisme', label: d.organisme },
+          { key: 'pays', label: d.pays },
+          { key: 'contact', label: d.contact },
+          { key: 'lieu', label: d.lieu },
+          { key: 'debut', label: d.debut },
+          { key: 'fin', label: d.fin },
+          { key: 'duree', label: d.duree },
+          { key: 'dateRecep', label: d.dateRecep },
+          { key: 'dateAccuseRecep', label: d.dateAccuseRecep },
+          { key: 'proforma', label: d.proforma },
+          { key: 'fiche', label: d.fiche },
+          { key: 'attestation', label: d.attestation },
+        ];
+
+        let rowHtml = '<tr>';
+        for (const col of columns) {
+          if (!hiddenCols.includes(col.key)) {
+            rowHtml += `<td data-col="${col.key}">${col.label ?? ''}</td>`;
+          }
+        }
+        rowHtml += '</tr>';
+        tbody.insertAdjacentHTML("beforeend", rowHtml);
+      }
+    }
+  }
+
+  Object.values(filters).forEach(el => el.addEventListener("change", applyFilters));
+
+  const resetButton = document.getElementById("resetFilters");
+
+  resetButton.addEventListener("click", function () {
+    Object.values(filters).forEach(el => {
+      el.value = "";
+    });
+    tbody.innerHTML = "";
+    Object.values(filters).forEach(el => el.dispatchEvent(new Event("change")));
+  });
+});
+
+// === Filtres avancés ===
+document.addEventListener("DOMContentLoaded", function () {
+  const tbody = document.querySelector("#table-demandes tbody");
+  const applyButton = document.querySelector("#applyAdvancedFilters");
+
+  function getCheckedValues(selector) {
+    return Array.from(document.querySelectorAll(selector))
+      .filter(cb => cb.checked)
+      .map(cb => cb.value);
+  }
+
+  function buildQueryParams() {
+    const params = new URLSearchParams();
+
+    // Récupérer types et séminaires cochés
+    const types = getCheckedValues(".filter-type-adv");
+    const seminaires = getCheckedValues(".filter-seminaire-adv");
+    const debut = document.getElementById("adv-debut").value;
+    const fin = document.getElementById("adv-fin").value;
+
+    if (types.length) types.forEach(t => params.append("types", t));
+    if (seminaires.length) seminaires.forEach(s => params.append("seminaires", s));
+    if (debut) params.append("debut", debut);
+    if (fin) params.append("fin", fin);
+
+    return params;
+  }
+
+  async function applyAdvancedFilters() {
+    const params = buildQueryParams();
+    const response = await fetch(`/filtrer-demandes-avances?${params.toString()}`);
+    const data = await response.json();
+
+    tbody.innerHTML = "";
+
+    if (!data.length) {
+      tbody.innerHTML = '<tr><td colspan="20" class="text-center">Aucune donnée</td></tr>';
+      return;
+    }
+
+    const hiddenCols = JSON.parse(localStorage.getItem("hiddenCols")) || [];
+
+    data.forEach(d => {
+      const columns = [
+        { key: 'id', label: d.id },
+        { key: 'type', label: d.type },
+        { key: 'reference', label: d.reference },
+        { key: 'theme', label: d.theme },
+        { key: 'nom', label: d.nom },
+        { key: 'prenoms', label: d.prenoms },
+        { key: 'tels', label: d.tels },
+        { key: 'emails', label: d.emails },
+        { key: 'organisme', label: d.organisme },
+        { key: 'pays', label: d.pays },
+        { key: 'contact', label: d.contact },
+        { key: 'lieu', label: d.lieu },
+        { key: 'debut', label: d.debut },
+        { key: 'fin', label: d.fin },
+        { key: 'duree', label: d.duree },
+        { key: 'dateRecep', label: d.dateRecep },
+        { key: 'dateAccuseRecep', label: d.dateAccuseRecep },
+        { key: 'proforma', label: d.proforma },
+        { key: 'fiche', label: d.fiche },
+        { key: 'attestation', label: d.attestation },
+      ];
+
+      let rowHtml = '<tr>';
+      columns.forEach(col => {
+        if (!hiddenCols.includes(col.key)) {
+          rowHtml += `<td data-col="${col.key}">${col.label ?? ''}</td>`;
+        }
+      });
+      rowHtml += '</tr>';
+      tbody.insertAdjacentHTML("beforeend", rowHtml);
+    });
+
+    const modal = bootstrap.Modal.getInstance(document.getElementById("advancedFilter"));
+    if (modal) modal.hide();
+  }
+
+  applyButton.addEventListener("click", applyAdvancedFilters);
+});
+
+// === Filtrage dynamique des séminaires dans les filtres avancés ===
+document.addEventListener("DOMContentLoaded", function () {
+  function filterSeminaireAdv() {
+    // Récupérer les types cochés parmi les checkboxes de type avancé
+    const selectedTypes = Array.from(document.querySelectorAll('.filter-type-adv:checked')).map(cb => cb.value);
+
+    // Pour chaque checkbox de séminaire avancé, vérifier si son data-type correspond à l'un des types sélectionnés
+    document.querySelectorAll('.filter-seminaire-adv').forEach(function(seminaireCheckbox) {
+      const seminaireType = seminaireCheckbox.getAttribute('data-type');
+      
+      // Si aucun type n'est sélectionné, on affiche toutes les options.
+      if (selectedTypes.length === 0 || selectedTypes.includes(seminaireType)) {
+        seminaireCheckbox.closest('.form-check').style.display = '';
+      } else {
+        seminaireCheckbox.closest('.form-check').style.display = 'none';
+        seminaireCheckbox.checked = false;
+      }
+    });
+  }
+
+  // Ajouter l'écouteur sur chaque checkbox de type avancé
+  document.querySelectorAll('.filter-type-adv').forEach(function(checkbox) {
+    checkbox.addEventListener('change', filterSeminaireAdv);
+  });
+  
+  // Appeler une première fois pour initialiser l'affichage dès l'ouverture
+  filterSeminaireAdv();
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("print").addEventListener("click", function () {
+    // Récupération du contenu HTML de la table
+    const tableHTML = document.getElementById("table-demandes").outerHTML;
+    
+    // Récupération des valeurs de date dans les filtres simples et avancés
+    const simpleDebut = document.getElementById("debut") ? document.getElementById("debut").value : "";
+    const simpleFin   = document.getElementById("fin") ? document.getElementById("fin").value : "";
+    const advDebut    = document.getElementById("adv-debut") ? document.getElementById("adv-debut").value : "";
+    const advFin      = document.getElementById("adv-fin") ? document.getElementById("adv-fin").value : "";
+    
+    // On choisit la valeur des dates en privilégiant les filtres simples s'ils sont renseignés
+    const debut = simpleDebut || advDebut;
+    const fin   = simpleFin   || advFin;
+    
+    // Fonction pour reformater une date du format "YYYY-MM-DD" vers "DD/MM/YYYY"
+    function formatDate(dateStr) {
+      if (!dateStr) return "";
+      const parts = dateStr.split("-");
+      return parts.length === 3 ? parts[2] + "/" + parts[1] + "/" + parts[0] : dateStr;
+    }
+    
+    // Définition de l'entête à afficher en fonction des dates renseignées
+    let headerText = "";
+    if (debut && fin) {
+      headerText = "Du " + formatDate(debut) + " au " + formatDate(fin);
+    } else if (debut) {
+      headerText = "Date de début: " + formatDate(debut);
+    } else if (fin) {
+      headerText = "Date de fin: " + formatDate(fin);
+    }
+    
+    // Création de la nouvelle fenêtre d'impression avec les styles appropriés
+    const printWindow = window.open("", "", "width=1000,height=800");
+    printWindow.document.open();
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Impression de la table</title>
+          <style>
+            /* Orientation paysage et style pour l'impression */
+            @page { size: landscape; }
+            body {
+              font-family: Arial, sans-serif;
+              margin: 20px;
+              font-size: 20px;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+            th, td {
+              border: 1px solid #ccc;
+              padding: 8px;
+              text-align: left;
+            }
+            th {
+              background: #f7f7f7;
+            }
+            .header {
+              text-align: center;
+              margin-bottom: 20px;
+              font-size: 20px;
+              font-weight: bold;
+            }
+          </style>
+        </head>
+        <body>
+          ${ headerText ? `<div class="header">${headerText}</div>` : "" }
+          ${ tableHTML }
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    
+    // Focalisation, impression automatique puis fermeture de la fenêtre
+    printWindow.focus();
+    printWindow.onload = function () {
+      printWindow.print();
+      printWindow.close();
+    };
+  });
+});
+
+
+
 </script>
+
+
 
 {% endblock %}
                    

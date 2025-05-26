@@ -1,14 +1,856 @@
-<!-- templates/lieux_de_formation.html -->
+
 {% extends 'base.html' %}
 {% block title %}Demandes{% endblock %}
 {% block content %}
+<style>
+    .form-section {
+        margin-bottom: 1rem;
+    }
+    .form-group {
+        margin: 0;
+        padding: .3rem;
+        margin-bottom: .5rem;
+    }
+    label {
+        font-weight: 700;
+    }
+</style>
 <h1 class="h3 mb-0 text-gray-800">Demandes</h1>
 <!-- table and modal here -->
+ <div class="d-flex mb-2" style="justify-content:space-between;">
+     <button type="button" class="btn btn-primary mb-2" data-bs-toggle="modal" data-bs-target="#newDemand">Nouvelle demande</button>
+    <button type="button" 
+    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+     title="Afficher/Masquer colonnes"
+    style="height:2rem;width:2rem;
+    justify-content:center;align-items:center;" 
+    class="d-flex btn btn-dark"><i class="fas fa-table"></i></button>
+    <!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title fs-6" id="staticBackdropLabel">Afficher / Masquer colonnes</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="columnToggles">
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="id" id="toggle-id" checked>
+                <label class="form-check-label" for="toggle-id">ID</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="type" id="toggle-type" checked>
+                <label class="form-check-label" for="toggle-type">Type</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="reference" id="toggle-reference" checked>
+                <label class="form-check-label" for="toggle-reference">Référence</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="theme" id="toggle-theme" checked>
+                <label class="form-check-label" for="toggle-theme">Thème</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="nom" id="toggle-nom" checked>
+                <label class="form-check-label" for="toggle-nom">Nom</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="prenoms" id="toggle-prenoms" checked>
+                <label class="form-check-label" for="toggle-prenoms">Prénom(s)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="tels" id="toggle-tels" checked>
+                <label class="form-check-label" for="toggle-tels">Tel(s)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="emails" id="toggle-emails" checked>
+                <label class="form-check-label" for="toggle-emails">Email(s)</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="organisme" id="toggle-organisme" checked>
+                <label class="form-check-label" for="toggle-organisme">Organisme</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="pays" id="toggle-pays" checked>
+                <label class="form-check-label" for="toggle-pays">Pays</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="contact" id="toggle-contact" checked>
+                <label class="form-check-label" for="toggle-contact">Contact</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="lieu" id="toggle-lieu" checked>
+                <label class="form-check-label" for="toggle-lieu">Lieu de formation</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="debut" id="toggle-debut" checked>
+                <label class="form-check-label" for="toggle-debut">Date de début</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="fin" id="toggle-fin" checked>
+                <label class="form-check-label" for="toggle-fin">Date de fin</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="duree" id="toggle-duree" checked>
+                <label class="form-check-label" for="toggle-duree">Durée</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="dateRecep" id="toggle-dateRecep" checked>
+                <label class="form-check-label" for="toggle-dateRecep">Date Réception Mail</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="dateAccuseRecep" id="toggle-dateAccuseRecep" checked>
+                <label class="form-check-label" for="toggle-dateAccuseRecep">Date Accusé Réception</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="proforma" id="toggle-proforma" checked>
+                <label class="form-check-label" for="toggle-proforma">Proforma</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="fiche" id="toggle-fiche" checked>
+                <label class="form-check-label" for="toggle-fiche">Fiche d'inscription</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input column-toggle" type="checkbox" data-col="attestation" id="toggle-attestation" checked>
+                <label class="form-check-label" for="toggle-attestation">Attestation</label>
+            </div>
+
+    <!-- ajoute autant de colonnes que tu as -->
+</div>
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+ </div>
+<!-- Modal -->
+<div  class="modal fade" id="newDemand" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div   class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content" style="width:50rem;">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Nouvelle demande</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('create_demande') }}" method="POST">
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Informations sur le séminaire</h6>
+                <hr>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-5">
+                        <label for="type">Type</label>
+                        <select name="type" id="type" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for type in types %}
+                                <option value="{{ type.name }}">{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="reference">Référence</label>
+                        <select name="reference" id="reference" class="form-control" required disabled>
+                            <option value="">-- Sélectionner --</option>
+                            <!--<option value="">azerty</option>-->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="">Thème</label>
+                        <select name="theme" id="theme" class="form-control" required disabled>
+                            <option value="">-- Sélectionner --</option>
+                            <!--<option value="">azerty</option>-->
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-section">
+                    <div class="form-group col-md-3">
+                        <label for="lieu">Lieu de formation</label>
+                        <select name="lieu" id="lieu" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for lieu in lieux %}
+                                <option value="{{ lieu.name }}">{{ lieu.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="debut">Date de début</label>
+                        <input type="date" class="form-control" id="debut" name="debut" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="fin">Date de fin</label>
+                        <input type="date" class="form-control" id="fin" name="fin" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="debut">Durée</label>
+                        <input type="text" class="form-control" id="debut" name="duree" readonly required>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Informations participant(e)</h6>
+                <hr>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-2">
+                        <label for="civilite">Civilité</label>
+                        <select name="civilite" id="civilite" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="m.">M.</option>
+                            <option value="mme.">Mme.</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="nom">Nom</label>
+                        <input type="text" class="form-control" id="nom" name="nom" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="prenoms">Prénom(s)</label>
+                        <input type="text" class="form-control" id="prenoms" name="prenoms" required>
+                    </div>
+                </div>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-6">
+                        <label for="tels">Télephone(s)</label>
+                        <textarea name="tels" id="tels" class="form-control" rows="3" style="resize: none;"></textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="emails">Email(s)</label>
+                        <textarea name="emails" id="emails" rows="3" style="resize: none;" class="form-control"></textarea>
+                    </div>
+                </div>
+
+            </section>
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Informations Professionnelles</h6>
+                <hr>
+                <div class="row form-section-group">
+                    <div class="form-group col-md-4">
+                        <label for="pays">Pays</label>
+                        <select name="pays" id="pays" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for country in countries %}
+                                <option value="{{ country }}">{{ country }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="organisme">Organisme</label>
+                        <select name="organisme" id="organisme" class="form-control" required disabled>
+                            <option value="">-- Sélectionner --</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="Contact">Contact</label>
+                        <input type="text" name="contact" id="contact" class="form-control">
+                    </div>
+                </div>
+            </section>
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Suivi Administratif</h6>
+                <hr>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-3">
+                        <label for="recep">Réception mail</label>
+                        <input type="date" name="recep" id="recep" class="form-control" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="accuseRecep">Accusé réception mail</label>
+                        <input type="date" name="accuseRecep" id="accuseRecep" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group col-md-3">
+                        <label for="accuseRecep">Proforma</label>
+                        <select name="proforma" id="proforma" class="form-control">
+                            <option value="non envoyée">non envoyée</option>
+                            <option value="sent">envoyée</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="fiche">Fiche d'inscription</label>
+                        <select name="fiche" id="fiche" class="form-control">
+                            <option value="not-received">non reçue</option>
+                            <option value="received">reçue</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="attestation">Attestation</label>
+                        <select name="attestation" id="attestation" class="form-control">
+                            <option value="non envoyée">non envoyée</option>
+                            <option value="non envoyée">envoyée</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-success">Enregistrer</button>
+        </form>
+            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
+<div class="card table-responsive" style="border:none;padding:10px;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col" data-col="id">ID</th>
+            <th scope="col" data-col="type">Type</th>
+            <th scope="col" data-col="reference">Référence</th>
+            <th scope="col" data-col="theme">Thème</th>
+            <th scope="col" data-col="nom">Nom</th>
+            <th scope="col" data-col="prenoms">Prénom(s)</th>
+            <th scope="col" data-col="tels">Tel(s)</th> 
+            <th scope="col" data-col="emails">Email(s)</th>
+            <th scope="col" data-col="organisme">Organisme</th>
+            <th scope="col" data-col="pays">Pays</th>
+            <th scope="col" data-col="contact">Contact</th>
+            <th scope="col" data-col="lieu">Lieu de formation</th>
+            <th scope="col" data-col="debut">Début</th>
+            <th scope="col" data-col="fin">Fin</th>
+            <th scope="col" data-col="duree">Durée</th>
+            <th scope="col" data-col="dateRecep">Date Rec. Mail</th>
+            <th scope="col" data-col="dateAccuseRecep">Date Accusé Recep.</th>
+            <th scope="col" data-col="proforma">Proforma</th>
+            <th scope="col" data-col="fiche">Fiche d'inscription</th>
+            <th scope="col" data-col="attestation">Attestation</th>
+            <th scope="col">Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for demande in demandes %}
+          <tr>
+            <th scope="row" data-col="id">{{ demande.id }}</th>
+            <td data-col="type">{{ demande.type }}</td>
+            <td data-col="reference">{{ demande.reference }}</td>
+            <td data-col="theme">{{ demande.theme }}</td>
+            <td data-col="nom">{{ demande.nom }}</td>
+            <td data-col="prenoms">{{ demande.prenoms }}</td>
+            <td data-col="tels">{{ demande.tels }}</td>
+            <td data-col="emails">{{ demande.emails }}</td>
+            <td data-col="organisme">{{ demande.organisme }}</td>
+            <td data-col="pays">{{ demande.pays }}</td>
+            <td data-col="contact">{{ demande.contact }}</td>
+            <td data-col="lieu">{{ demande.lieu_formation }}</td>
+            <td data-col="debut">{{ demande.date_debut }}</td>
+            <td data-col="fin">{{ demande.date_fin }}</td>
+            <td data-col="duree">{{ demande.duree }}</td>
+            <td data-col="dateRecep">{{ demande.date_recep_mail }}</td>
+            <td data-col="dateAccuseRecep">{{ demande.date_accuse_recep }}</td>
+            <td data-col="proforma">{{ demande.proforma }}</td>
+            <td data-col="fiche">{{ demande.fiche_inscription }}</td>
+            <td data-col="attestation">{{ demande.attestation }}</td>
+            <td>
+                <button data-bs-toggle="modal" 
+                data-bs-target="#deleteModal-{{ demande.id }}"
+                class="btn btn-sm btn-danger" title="supprimer"><i class="fas fa-trash"></i></button>
+
+              <button title="modifier" class="btn btn-sm btn-warning"
+                      data-toggle="modal"
+                      data-target="#editModal-{{ demande.id }}">
+                <i class="fas fa-pencil"></i>
+              </button>
+            </td>
+          </tr>
+          <!-- Delete Modal -->
+            <div class="modal fade" id="deleteModal-{{ demande.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Attention</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('delete_demande', id=demande.id) }}" style="display:inline;">
+                        <p>Êtes-vous sûr de vouloir supprimer cette demande ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+
+            <!-- Edit Modal -->
+<div  class="modal fade" id="editModal-{{ demande.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div   class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content" style="width:50rem;">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">Modifier demande</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{{ url_for('edit_demande', id=demande.id) }}" method="POST">
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Informations sur le séminaire</h6>
+                <hr>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-5">
+                        <label for="edit-type">Type</label>
+                        <select name="type" id="edit-type" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for type in types %}
+                                {% if type.name == demande.type %}
+                                    <option value="{{ type.name }}" selected>{{ type.name }}</option>
+                                {% else %}
+                                    <option value="{{ type.name }}">{{ type.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label for="edit-reference">Référence</label>
+                        <select name="reference" id="edit-reference" class="form-control" required disabled>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="{{ demande.reference }}" selected>{{ demande.reference }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <label for="edit-theme">Thème</label>
+                        <select name="theme" id="edit-theme" class="form-control" required disabled>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="{{ demande.theme }}" selected>{{ demande.theme }}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-section">
+                    <div class="form-group col-md-3">
+                        <label for="edit-lieu">Lieu de formation</label>
+                        <select name="lieu" id="edit-lieu" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for lieu in lieux %}
+                                {% if lieu.name == demande.lieu_formation %}
+                                    <option value="{{ lieu.name }}" selected>{{ lieu.name }}</option>
+                                {% else %}
+                                    <option value="{{ lieu.name }}">{{ lieu.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edit-debut">Date de début</label>
+                        <input type="date" class="form-control" id="edit-debut" name="debut" value="{{ demande.date_debut }}" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edit-fin">Date de fin</label>
+                        <input type="date" class="form-control" id="edit-fin" name="fin" value="{{ demande.date_fin }}" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edit-debut">Durée</label>
+                        <input type="text" class="form-control" id="edit-duree" name="duree" value="{{ demande.duree }}" readonly required>
+                    </div>
+                </div>
+            </section>
+
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Informations participant(e)</h6>
+                <hr>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-2">
+                        <label for="edit-civilite">Civilité</label>
+                        <select name="civilite" id="edit-civilite" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            <option value="m." {% if demande.civilite == 'm.' %}selected{% endif %}>M.</option>
+                            <option value="mme." {% if demande.civilite == 'mme.' %}selected{% endif %}>Mme.</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="edit-nom">Nom</label>
+                        <input type="text" class="form-control" id="edit-nom" name="nom" value="{{ demande.nom }}" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="edit-prenoms">Prénom(s)</label>
+                        <input type="text" class="form-control" id="edit-prenoms" name="prenoms" value="{{ demande.prenoms }}" required>
+                    </div>
+                </div>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-6">
+                        <label for="edit-tels">Télephone(s)</label>
+                        <textarea name="tels" id="edit-tels" class="form-control" rows="3" style="resize: none;">
+                            {{ demande.tels }}
+                        </textarea>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="edit-emails">Email(s)</label>
+                        <textarea name="emails" id="edit-emails" rows="3" style="resize: none;" class="form-control">
+                            {{ demande.emails }}
+                        </textarea>
+                    </div>
+                </div>
+
+            </section>
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Informations Professionnelles</h6>
+                <hr>
+                <div class="row form-section-group">
+                    <div class="form-group col-md-4">
+                        <label for="edit-pays">Pays</label>
+                        <select name="pays" id="edit-pays" class="form-control" required>
+                            <option value="">-- Sélectionner --</option>
+                            {% for country in countries %}
+                                {% if country == demande.pays %}
+                                    <option value="{{ country }}" selected>{{ country }}</option>
+                                {% else %}
+                                    <option value="{{ country }}">{{ country }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="edit-organisme">Organisme</label>
+                        <select name="organisme" id="edit-organisme" class="form-control" required disabled>
+                            <option value="">-- Sélectionner --</option>
+                            {% for organisme in organismes %}
+                                {% if organisme.name == demande.organisme %}
+                                    <option value="{{ organisme.name }}" selected>{{ organisme.name }}</option>
+                                {% else %}
+                                    <option value="{{ organisme.name }}">{{ organisme.name }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="edit-contact">Contact</label>
+                        <input type="text" name="contact" id="edit-contact" value="{{ demande.contact }}" class="form-control">
+                    </div>
+                </div>
+            </section>
+            <section class="form-section">
+                <h6 style="opacity:.5;margin:0;padding:0;">Suivi Administratif</h6>
+                <hr>
+                <div class="form-section-group row">
+                    <div class="form-group col-md-3">
+                        <label for="edit-recep">Réception mail</label>
+                        <input type="date" name="recep" id="edit-recep" value="{{ demande.date_recep_mail }}" class="form-control" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edit-accuseRecep">Accusé réception mail</label>
+                        <input type="date" name="accuseRecep" id="edit-accuseRecep" value="{{ demande.date_accuse_recep }}" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group col-md-3">
+                        <label for="accuseRecep">Proforma</label>
+                        <select name="proforma" id="proforma" class="form-control">
+                            <option value="envoyée" {% if demande.proforma == 'envoyée' %}selected{% endif %}>envoyée</option>
+                            <option value="non envoyée" {% if demande.proforma == 'non envoyée' %}selected{% endif %}>non envoyée</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edit-fiche">Fiche d'inscription</label>
+                        <select name="fiche" id="edit-fiche" class="form-control">
+                            <option value="reçue" {% if demande.fiche_inscription == 'reçue' %}selected{% endif %}>reçue</option>
+                            <option value="non reçue" {% if demande.fiche_inscription == 'non reçue' %}selected{% endif %}>non reçue</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="edit-attestation">Attestation</label>
+                        <select name="attestation" id="edit-attestation" class="form-control">
+                            <option value="envoyé" {% if demande.attestation == 'envoyée' %}selected{% endif %}>non envoyée</option>
+                            <option value="non envoyé" {% if demande.attestation == 'non envoyée' %}selected{% endif %}>envoyée</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-warning">Mettre à jour</button>
+        </form>
+            <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Fermer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    
+           
+            {% endfor %}
+            
+        </tbody>
+      </table>
+</div>
 
 
 <script>
     setActiveLink('demandes')
+
+    
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const typeSelect = document.getElementById('type');
+    const referenceSelect = document.getElementById('reference');
+    const themeSelect = document.getElementById('theme');
+
+    const editTypeSelect = document.getElementById('edit-type');
+    const editReferenceSelect = document.getElementById('edit-reference');
+    const editThemeSelect = document.getElementById('edit-theme');
+
+    const paysSelect = document.getElementById('pays');
+    const organismeSelect = document.getElementById('organisme');
+
+    const editPaysSelect = document.getElementById('edit-pays');
+    const editOrganismeSelect = document.getElementById('edit-organisme');
+
+    // duree calculation
+    const debutInput = document.getElementById('debut');
+    const finInput = document.getElementById('fin');
+    const dureeInput = document.querySelector('input[name="duree"]');
+
+    const editDebutInput = document.getElementById('edit-debut');
+    const editFinInput = document.getElementById('edit-fin');
+    const editDureeInput = document.querySelector('#edit-duree');
+        
+    // Disable reference and theme on load
+    referenceSelect.disabled = true;
+    themeSelect.disabled = true;
+
+    organismeSelect.disabled = true;
+
+    
+        
+    // Utility to clear and populate a select
+    function populateSelect(select, values) {
+        select.innerHTML = '<option value="">-- Sélectionner --</option>';
+        values.forEach(val => {
+            const option = document.createElement('option');
+            option.value = val;
+            option.textContent = val;
+            select.appendChild(option);
+        });
+    }
+        
+    typeSelect.addEventListener('change', function () {
+        const selectedType = this.value;
+            referenceSelect.disabled = true;
+            themeSelect.disabled = true;
+            themeSelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+        
+            if (!selectedType) return;
+        
+                fetch('/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                },
+                    body: JSON.stringify({ action: 'get_references', type: selectedType })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    populateSelect(referenceSelect, data);
+                    referenceSelect.disabled = false;
+                });
+            });
+
+        
+            referenceSelect.addEventListener('change', function () {
+                const selectedReference = this.value;
+                themeSelect.disabled = true;
+        
+                if (!selectedReference) return;
+        
+                fetch('/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'get_themes', reference: selectedReference })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    populateSelect(themeSelect, data);
+                    themeSelect.disabled = false;
+                });
+            });
+
+            paysSelect.addEventListener('change', function () {
+                const selectedCountry = this.value;
+                organismeSelect.disabled = true;
+                organismeSelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+            
+                if (!selectedCountry) return;
+            
+                fetch('/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'get_organismes', pays: selectedCountry })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(org => {
+                        const option = document.createElement('option');
+                        option.value = org;
+                        option.textContent = org;
+                        organismeSelect.appendChild(option);
+                    });
+                    organismeSelect.disabled = false;
+                });
+            });
+
+            // edit modal 
+
+            editTypeSelect.addEventListener('change', function () {
+                const selectedType = this.value;
+                editReferenceSelect.disabled = true;
+                editThemeSelect.disabled = true;
+                editThemeSelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+        
+            if (!selectedType) return;
+        
+                fetch('/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                },
+                    body: JSON.stringify({ action: 'get_references', type: selectedType })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    populateSelect(editReferenceSelect, data);
+                    editReferenceSelect.disabled = false;
+                });
+            });
+
+            editReferenceSelect.addEventListener('change', function () {
+                const selectedReference = this.value;
+                editThemeSelect.disabled = true;
+        
+                if (!selectedReference) return;
+        
+                fetch('/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'get_themes', reference: selectedReference })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    populateSelect(editThemeSelect, data);
+                    editThemeSelect.disabled = false;
+                });
+            });
+
+            editPaysSelect.addEventListener('change', function () {
+                const selectedCountry = this.value;
+                editOrganismeSelect.disabled = true;
+                editOrganismeSelect.innerHTML = '<option value="">-- Sélectionner --</option>';
+            
+                if (!selectedCountry) return;
+            
+                fetch('/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ action: 'get_organismes', pays: selectedCountry })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(org => {
+                        const option = document.createElement('option');
+                        option.value = org;
+                        option.textContent = org;
+                        editOrganismeSelect.appendChild(option);
+                    });
+                    editOrganismeSelect.disabled = false;
+                });
+            });
+
+            function updateDuree() {
+                const debut = new Date(debutInput.value);
+                const fin = new Date(finInput.value);
+                const editDebut = new Date(editDebutInput.value);
+                const editFin = new Date(editFinInput.value);
+            
+                if (debut && fin && !isNaN(debut) && !isNaN(fin)) {
+                    const diffTime = fin - debut;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+                    if (diffDays > 7) {
+                        const weeks = Math.round(diffDays / 7);
+                        dureeInput.value = weeks + (weeks > 1 ? " semaines" : " semaine");
+                    } else {
+                        dureeInput.value = diffDays + (diffDays > 1 ? " jours" : " jour");
+                    }
+                } else {
+                    dureeInput.value = '';
+                }
+
+                if (editDebut && editFin && !isNaN(editDebut) && !isNaN(editFin)) {
+                    const diffTime = editFin - editDebut;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+                    if (diffDays > 7) {
+                        const weeks = Math.round(diffDays / 7);
+                        editDureeInput.value = weeks + (weeks > 1 ? " semaines" : " semaine");
+                    } else {
+                        editDureeInput.value = diffDays + (diffDays > 1 ? " jours" : " jour");
+                    }
+                } else {
+                    editDureeInput.value = '';
+                }
+            }
+            
+            debutInput.addEventListener('change', updateDuree);
+            finInput.addEventListener('change', updateDuree);
+            editDebutInput.addEventListener('change', updateDuree);
+            editFinInput.addEventListener('change', updateDuree);
+        });
+
+
+
+        
+
+
+      document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('.column-toggle');
+    const storageKey = 'hiddenCols';
+
+    let hiddenCols = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+    function toggleColumn(colName, show) {
+        const cells = document.querySelectorAll(`[data-col="${colName}"]`);
+        cells.forEach(cell => {
+            // Ne pas masquer les cases à cocher
+            if (!cell.classList.contains('column-toggle-container')) {
+                cell.style.display = show ? '' : 'none';
+            }
+        });
+    }
+
+    checkboxes.forEach(checkbox => {
+        const colName = checkbox.getAttribute('data-col');
+        const shouldBeVisible = !hiddenCols.includes(colName);
+
+        checkbox.checked = shouldBeVisible;
+        toggleColumn(colName, shouldBeVisible);
+
+        checkbox.addEventListener('change', function () {
+            const isChecked = this.checked;
+
+            toggleColumn(colName, isChecked);
+
+            if (!isChecked && !hiddenCols.includes(colName)) {
+                hiddenCols.push(colName);
+            } else if (isChecked && hiddenCols.includes(colName)) {
+                hiddenCols = hiddenCols.filter(col => col !== colName);
+            }
+
+            localStorage.setItem(storageKey, JSON.stringify(hiddenCols));
+        });
+    });
+});
+
+
+
+        
 </script>
 {% endblock %}

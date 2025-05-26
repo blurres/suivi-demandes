@@ -2,6 +2,16 @@
 {% extends 'base.html' %}
 {% block title %}Séminaires{% endblock %}
 {% block content %}
+<style>
+
+  table thead th {
+      position: sticky;
+      line-height: 50px;
+      top: 0;
+      z-index: 1;
+      
+    }
+</style>
 <h1 class="h3 mb-0 text-gray-800">Séminaires</h1>
 <!-- table and modal here -->
 <button class="btn btn-primary mb-2" type="button" data-toggle="modal" data-target="#staticBackdrop">Nouveau</button>
@@ -16,22 +26,24 @@
 </button>
 </div>
 <div class="modal-body">
-<form action="">
+<form method="POST" action="{{ url_for('create_seminaire') }}">
 <div class="form-group">
-<label for="exampleFormControlInput1">Types</label>
-<select name="" id="" class="form-control">
-<option value="">xxxxxxxxxxxxx</option>
-<option value="">yyyyyyyyyyyyy</option>
-<option value="">zzzzzzzzzzzz</option>
+<label for="type">Types</label>
+<select name="type" id="type" class="form-control">
+  <option value="">-- Sélectionner --</option>
+  {% for type in types %}
+    <option value="{{ type.name }}">{{ type.name }}</option>
+  {% endfor %}
+
 </select>
 </div>
 <div class="form-group">
-<label for="exampleFormControlInput1">Référence</label>
-<input type="text" class="form-control" id="exampleFormControlInput2">
+<label for="reference">Référence</label>
+<input type="text" class="form-control" id="reference" name="reference" required>
 </div>
 <div class="form-group">
-<label for="exampleFormControlInput1">Thème</label>
-<textarea name="" id="" placeholder="" class="form-control"></textarea>
+<label for="theme">Thème</label>
+<textarea name="theme" id="theme" class="form-control"></textarea>
 <!-- <textarea type="text" class="form-control" id="exampleFormControlInput2"> -->
 </div>
 
@@ -47,7 +59,7 @@
 
 
 
-<div class="card" style="border:none;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
+<div class="card mb-1" style="max-height: 380px;overflow-y: auto;border:none;border-radius:10px;padding:0 5px;box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;">
 <table class="table table-striped">
     <thead>
       <tr>
@@ -59,87 +71,88 @@
       </tr>
     </thead>
     <tbody>
+        {% for seminaire in seminaires %}
       <tr>
-        <th scope="row">1</th>
-        <td>13DEL</td>
-        <td>Mark</td>
-        <td>xx</td>
-        <td class="dropdown" 
-        ><i style="font-size: 1.4rem;margin-left:5px;cursor:pointer;" 
-        class="dropdown-toggle fa-solid fa-ellipsis" 
-        type="button" 
-        id="dropdownMenuButton" 
-        data-toggle="dropdown" 
-        aria-haspopup="true" 
-        aria-expanded="false"></i>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#staticBackdrop1">Voir</a>
-            <a class="dropdown-item" href="#">Modifier</a>
-            <a class="dropdown-item" href="#">Supprimer</a>
-          </div>
-    </td>
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop1" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-<div class="modal-content">
-<div class="modal-header">
-<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-<div class="modal-body">
-...
-</div>
-<div class="modal-footer">
-<button type="button" class="btn bg-dark text-white" data-dismiss="modal">Fermer</button>
-</div>
-</div>
-</div>
-</div>             
-    </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>ij5knk</td>
-        <td>Jacob</td>
-        <td>xx</td>
-        <td class="dropdown" 
-        ><i style="font-size: 1.4rem;margin-left:5px;cursor:pointer;" 
-        class="dropdown-toggle fa-solid fa-ellipsis" 
-        type="button" 
-        id="dropdownMenuButton" 
-        data-toggle="dropdown" 
-        aria-haspopup="true" 
-        aria-expanded="false"></i>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Voir</a>
-            <a class="dropdown-item" href="#">Modifier</a>
-            <a class="dropdown-item" href="#">Supprimer</a>
-          </div>
-    </td>
+        <th scope="row">{{ seminaire.id }}</th>
+        <td>{{ seminaire.reference }}</td>
+        <td>{{ seminaire.theme }}</td>
+        <td>{{ seminaire.type_formation }}</td>
+        <td>
+          
+            <button data-bs-toggle="modal" 
+                data-bs-target="#deleteModal-{{ seminaire.id }}"
+                class="btn btn-sm btn-danger" title="supprimer"><i class="fas fa-trash"></i></button>
+          <button class="btn btn-sm btn-warning"
+                  data-toggle="modal"
+                  data-target="#editModal-{{ seminaire.id }}">
+            <i class="fas fa-pencil"></i>
+          </button>
+        </td>
       </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>llepke</td>
-        <td>Larry</td>
-        <td>xx</td>
-        <td class="dropdown" 
-        ><i style="font-size: 1.4rem;margin-left:5px;cursor:pointer;" 
-        class="dropdown-toggle fa-solid fa-ellipsis" 
-        type="button" 
-        id="dropdownMenuButton" 
-        data-toggle="dropdown" 
-        aria-haspopup="true" 
-        aria-expanded="false"></i>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Voir</a>
-            <a class="dropdown-item" href="#">Modifier</a>
-            <a class="dropdown-item" href="#">Supprimer</a>
+
+      <!-- Delete modal -->
+       <div class="modal fade" id="deleteModal-{{ seminaire.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Attention</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="{{ url_for('delete_seminaire', id=seminaire.id) }}" style="display:inline;">
+                        <p>Êtes-vous sûr de vouloir supprimer ce séminaire ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                </div>
+                </div>
+            </div>
+            </div>
+
+        <!-- Edit modal -->
+      <div class="modal fade" id="editModal-{{ seminaire.id }}" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <form method="POST" action="{{ url_for('edit_seminaire', id=seminaire.id) }}">
+              <div class="modal-header">Modifier le séminaire</div>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="edit-type">Type</label>
+                  <select name="type" id="edit-type" class="form-control" required>
+                    <option value="">-- Sélectionner --</option>
+                    {% for type in types %}
+                        {% if type.name == seminaire.type_formation %}
+                            <option value="{{ type.name }}" selected>{{ type.name }}</option>
+                        {% else %}
+                            <option value="{{ type.name }}">{{ type.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+                <div class="form-group">
+                  <label for="edit-reference">Référence</label>
+                  <input name="reference" value="{{ seminaire.reference }}" class="form-control" id="edit-reference" required>
+                </div>
+                <div class="form-group">
+                  <label for="edit-theme">Thème</label>
+                  <textarea name="theme" id="edit-theme" class="form-control">{{ seminaire.theme }}</textarea>
+                </div>
+                
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-warning text-black" type="submit">Mettre à jour</button>
+              </form>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+              </div>
           </div>
-    </td>
-      </tr>
+        </div>
+      </div>
+      {% endfor %}
     </tbody>
   </table>
+
   </div>
 
   <script>

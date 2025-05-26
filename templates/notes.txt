@@ -1,0 +1,24 @@
+<section class="form-section">
+    
+    <div class="form-group">
+        
+    </div>
+    
+    
+    
+    <section class="form-group-section">
+        <div class="form-group">
+            <label for="date-debut">Date de début</label>
+            <input type="date" name="debut" id="date-debut" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="date-fin">Date de fin</label>
+            <input type="date" name="fin" id="date-fin" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="duree">Durée</label>
+            <input type="text" name="duree" id="duree" class="form-control" required>
+        </div>
+        
+    </section>
+</section>
