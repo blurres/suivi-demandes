@@ -182,8 +182,8 @@
                         <input type="date" class="form-control" id="fin" name="fin" required>
                     </div>
                     <div class="form-group col-md-3">
-                        <label for="debut">Durée</label>
-                        <input type="text" class="form-control" id="debut" name="duree" readonly required>
+                        <label for="duree">Durée</label>
+                        <input type="text" class="form-control" id="duree" name="duree" readonly required>
                     </div>
                 </div>
             </section>
@@ -566,8 +566,7 @@
         </div>
       </div>
     </div>
-  </div>
-    
+  </div> 
            
             {% endfor %}
             
@@ -575,12 +574,8 @@
       </table>
 </div>
 
-
 <script>
     setActiveLink('demandes')
-
-    
-
 
     document.addEventListener('DOMContentLoaded', function () {
     const typeSelect = document.getElementById('type');
@@ -604,7 +599,62 @@
 
     const editDebutInput = document.getElementById('edit-debut');
     const editFinInput = document.getElementById('edit-fin');
-    const editDureeInput = document.querySelector('#edit-duree');
+    const editDureeInput = document.getElementById('edit-duree');
+
+    function editUpdateDuree() {
+                const editDebut = new Date(editDebutInput.value);
+                const editFin = new Date(editFinInput.value);
+
+                if (editDebut && editFin && !isNaN(editDebut) && !isNaN(editFin)) {
+                    const diffTime = editFin - editDebut;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+                    if (diffDays > 7) {
+                        const weeks = Math.round(diffDays / 7);
+                        editDureeInput.value = weeks + (weeks > 1 ? " semaines" : " semaine");
+                    } else {
+                        if (diffDays < 1) {
+                            editDureeInput.value = 'durée invalide';
+                        } else {
+                            editDureeInput.value = diffDays + (diffDays > 1 ? " jours" : " jour");
+                        }
+                    }
+                } else {
+                    editDureeInput.value = '';
+                }
+            }
+
+            function updateDuree() {
+                const debut = new Date(debutInput.value);
+                const fin = new Date(finInput.value);
+                
+            
+                if (debut && fin && !isNaN(debut) && !isNaN(fin)) {
+                    const diffTime = fin - debut;
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+                    if (diffDays > 7) {
+                        const weeks = Math.round(diffDays / 7);
+                        dureeInput.value = weeks + (weeks > 1 ? " semaines" : " semaine");
+                    } else {
+                        // if invalid date range, set to "invalid"
+                        if (diffDays < 1) {
+                            dureeInput.value = 'durée invalide';
+                        } else {
+                            dureeInput.value = diffDays + (diffDays > 1 ? " jours" : " jour");
+                        }
+                    }
+                } else {
+                    dureeInput.value = '';
+                }                
+            }
+
+
+        debutInput.addEventListener('change', updateDuree);
+        finInput.addEventListener('change', updateDuree);
+
+        editDebutInput.addEventListener('change', editUpdateDuree);
+        editFinInput.addEventListener('change', editUpdateDuree);
         
     // Disable reference and theme on load
     referenceSelect.disabled = true;
@@ -612,8 +662,7 @@
 
     organismeSelect.disabled = true;
 
-    
-        
+            
     // Utility to clear and populate a select
     function populateSelect(select, values) {
         select.innerHTML = '<option value="">-- Sélectionner --</option>';
@@ -762,52 +811,9 @@
                     });
                     editOrganismeSelect.disabled = false;
                 });
-            });
-
-            function updateDuree() {
-                const debut = new Date(debutInput.value);
-                const fin = new Date(finInput.value);
-                const editDebut = new Date(editDebutInput.value);
-                const editFin = new Date(editFinInput.value);
+            });    
             
-                if (debut && fin && !isNaN(debut) && !isNaN(fin)) {
-                    const diffTime = fin - debut;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            
-                    if (diffDays > 7) {
-                        const weeks = Math.round(diffDays / 7);
-                        dureeInput.value = weeks + (weeks > 1 ? " semaines" : " semaine");
-                    } else {
-                        dureeInput.value = diffDays + (diffDays > 1 ? " jours" : " jour");
-                    }
-                } else {
-                    dureeInput.value = '';
-                }
-
-                if (editDebut && editFin && !isNaN(editDebut) && !isNaN(editFin)) {
-                    const diffTime = editFin - editDebut;
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-            
-                    if (diffDays > 7) {
-                        const weeks = Math.round(diffDays / 7);
-                        editDureeInput.value = weeks + (weeks > 1 ? " semaines" : " semaine");
-                    } else {
-                        editDureeInput.value = diffDays + (diffDays > 1 ? " jours" : " jour");
-                    }
-                } else {
-                    editDureeInput.value = '';
-                }
-            }
-            
-            debutInput.addEventListener('change', updateDuree);
-            finInput.addEventListener('change', updateDuree);
-            editDebutInput.addEventListener('change', updateDuree);
-            editFinInput.addEventListener('change', updateDuree);
-        });
-
-
-
-        
+        });       
 
 
       document.addEventListener('DOMContentLoaded', function () {
